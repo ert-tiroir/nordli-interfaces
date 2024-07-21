@@ -1,0 +1,11 @@
+{
+  "name": "nordli-interfaces",
+  "version": "1.0.0",
+  "description": "Interfaces for the Nordli Rocket",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Théo Hollender",
+  "license": "MIT"
+}
