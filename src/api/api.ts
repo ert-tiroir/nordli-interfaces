@@ -1,5 +1,5 @@
 import { ProtoMap } from "../protomap.ts";
-import { Alert } from "./alert/event.ts";
+import { Alert, AlertCallback } from "./alert/event.ts";
 import { Event, EVENT_TYPES, EventCallback } from "./events.ts";
 
 export class RocketAPI {
@@ -62,12 +62,12 @@ export class RocketAPI {
             unsubscribe: (uuid: string) => this.unsubscribe(uuid),
 
             alert: {
-                debug    : (title: string, message: string) => Alert.sendDebug    (title, message),
-                info     : (title: string, message: string) => Alert.sendInfo     (title, message),
-                warning  : (title: string, message: string) => Alert.sendWarning  (title, message),
-                danger   : (title: string, message: string) => Alert.sendDanger   (title, message),
-                critical : (title: string, message: string) => Alert.sendCritical (title, message),
-                success  : (title: string, message: string) => Alert.sendSuccess  (title, message)
+                debug    : (title: string, message: string, callback?: AlertCallback) => Alert.sendDebug    (title, message, callback),
+                info     : (title: string, message: string, callback?: AlertCallback) => Alert.sendInfo     (title, message, callback),
+                warning  : (title: string, message: string, callback?: AlertCallback) => Alert.sendWarning  (title, message, callback),
+                danger   : (title: string, message: string, callback?: AlertCallback) => Alert.sendDanger   (title, message, callback),
+                critical : (title: string, message: string, callback?: AlertCallback) => Alert.sendCritical (title, message, callback),
+                success  : (title: string, message: string, callback?: AlertCallback) => Alert.sendSuccess  (title, message, callback)
             },
         };
     }

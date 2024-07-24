@@ -8,11 +8,27 @@ export const INFO     = "INFO";
 export const DEBUG    = "DEBUG";
 export const SUCCESS  = "SUCCESS";
 
+export class AlertCallback {
+    readonly callback: (accepted: boolean) => void;
+
+    readonly acceptString: string;
+    readonly declineString: string;
+
+    constructor (callback: (accepted: boolean) => void, accept: string, decline: string) {
+        this.callback = callback;
+
+        this.acceptString  = accept;
+        this.declineString = decline;
+    }
+};
+
 export class Alert extends Event {
     level   : string;
 
     title   : string;
     message : string;
+
+    callback?: AlertCallback;
 
     isCritical (): boolean { return this.level == CRITICAL; }
     isDanger   (): boolean { return this.level == DANGER;   }
@@ -25,30 +41,36 @@ export class Alert extends Event {
     getTitle   (): string { return this.title;   }
     getMessage (): string { return this.message; }
 
+    getCallback (): AlertCallback | undefined {
+        return this.callback;
+    }
+
     getName(): string {
         return "alert";
     }
 
-    private constructor (level: string, title: string, message: string) {
+    private constructor (level: string, title: string, message: string, callback?: AlertCallback) {
         super();
 
         this.level   = level;
         this.title   = title;
         this.message = message;
+
+        this.callback = callback;
     }
 
-    private static send (level: string, title: string, message: string) {
-        let event = new Alert(level, title, message);
+    private static send (level: string, title: string, message: string, callback?: AlertCallback) {
+        let event = new Alert(level, title, message, callback);
 
         RocketAPI.instance.dispatch(event);
 
         return event;
     }
     
-    static sendCritical (title: string, message: string) { return Alert.send(CRITICAL, title, message); }
-    static sendDanger   (title: string, message: string) { return Alert.send(DANGER,   title, message); }
-    static sendWarning  (title: string, message: string) { return Alert.send(WARN,     title, message); }
-    static sendInfo     (title: string, message: string) { return Alert.send(INFO,     title, message); }
-    static sendDebug    (title: string, message: string) { return Alert.send(DEBUG,    title, message); }
-    static sendSuccess  (title: string, message: string) { return Alert.send(SUCCESS,  title, message); }
+    static sendCritical (title: string, message: string, callback?: AlertCallback) { return Alert.send(CRITICAL, title, message, callback); }
+    static sendDanger   (title: string, message: string, callback?: AlertCallback) { return Alert.send(DANGER,   title, message, callback); }
+    static sendWarning  (title: string, message: string, callback?: AlertCallback) { return Alert.send(WARN,     title, message, callback); }
+    static sendInfo     (title: string, message: string, callback?: AlertCallback) { return Alert.send(INFO,     title, message, callback); }
+    static sendDebug    (title: string, message: string, callback?: AlertCallback) { return Alert.send(DEBUG,    title, message, callback); }
+    static sendSuccess  (title: string, message: string, callback?: AlertCallback) { return Alert.send(SUCCESS,  title, message, callback); }
 };

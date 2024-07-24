@@ -6,7 +6,7 @@ function deepCopy (object) {
   let res = {};
   for (let x of Object.keys(object))
     res[x] = deepCopy( object[x] );
-console.log(res, object)
+
   return res;
 }
 globalThis.rocket = deepCopy(_rocket);

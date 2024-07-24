@@ -5,6 +5,10 @@ import { AlertContainer } from "./Alert.tsx";
 function App(): React.JSX.Element {
   return (
     <div className="bg-gray-100 w-full h-full">
+      <div className="w-full h-full">
+        
+      </div>
+      
       <AlertContainer />
     </div>
   );

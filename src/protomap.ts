@@ -32,7 +32,7 @@ export const ProtoMap = {
             let index: number = -1;
             if (prototype.index !== undefined) index = prototype.index;
 
-            res.push({ index, value: JSON.stringify(arg) });
+            res.push({ index, value: arg });
         }
 
         return res;
@@ -46,7 +46,7 @@ export const ProtoMap = {
                 res.push(arg);
                 continue ;
             }
-            arg.value = JSON.parse(arg.value);
+
             if (arg.index != -1)
                 Object.setPrototypeOf(arg.value, PROTO_TYPES[arg.index].prototype);
         
