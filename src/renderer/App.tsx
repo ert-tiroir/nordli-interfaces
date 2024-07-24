@@ -1,10 +1,11 @@
 import React from "react";
+import { VideoDataEvent } from "../api/media/video/event.ts";
+import { AlertContainer } from "./Alert.tsx";
 
 function App(): React.JSX.Element {
   return (
-    <div>
-      <h1 className="bg-gray-500 text-white text-2xl">💖 Hello World!</h1>
-      <p>Welcome to Nordli Interfaces !</p>
+    <div className="bg-gray-100 w-full h-full">
+      <AlertContainer />
     </div>
   );
 }
