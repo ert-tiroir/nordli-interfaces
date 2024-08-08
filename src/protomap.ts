@@ -1,9 +1,18 @@
 import { Alert } from "./api/alert/event.ts";
+import { VideoDataEvent, VideoEndEvent, VideoStartEvent } from "./api/media/video/event.ts";
+import { NetworkChangedEvent, NetworkInitEvent } from "./api/network/events.ts";
 
 type ProtoType = { prototype: { index: number } };
 
 const PROTO_TYPES: ProtoType[] = [
-    Alert
+    Alert,
+
+    NetworkChangedEvent,
+    NetworkInitEvent,
+
+    VideoStartEvent,
+    VideoDataEvent,
+    VideoEndEvent
 ] as any[];
 
 let protoInit: boolean = false;

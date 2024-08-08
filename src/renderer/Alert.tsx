@@ -27,7 +27,12 @@ export function CloseIcon (props: AlertViewProps) {
     const { alert, close } = props;
     
     return (
-        <button onClick={ close }>
+        <button onClick={ () => {
+            const callback = alert.getCallback();
+            if (callback) callback.onClose();
+
+            close();
+        } }>
             <XMarkIcon className="cursor-pointer w-6 h-6 text-gray-400 hover:text-gray-500 transition-all delay-50 duration-100"></XMarkIcon>
         </button>
     );

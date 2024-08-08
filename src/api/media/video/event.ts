@@ -13,9 +13,9 @@ export class VideoEndEvent extends Event {
 };
 
 export class VideoDataEvent extends Event {
-    private _data: Uint8Array;
+    private _data: Buffer;
 
-    constructor (data: Uint8Array) {
+    constructor (data: Buffer) {
         super();
         this._data = data;
     }

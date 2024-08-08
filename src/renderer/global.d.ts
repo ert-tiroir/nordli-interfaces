@@ -2,19 +2,35 @@
  * Exposed data by the api part
  */
 
+import { Alert, AlertCallback } from "../api/alert/event.ts";
 import { Event } from "../api/events.ts";
-import { VideoDataEvent, VideoEndEvent, VideoStartEvent } from "../api/media/video/event.ts";
 
 export {};
 
 declare global {
     var _rocket: {
         subscribe: <K extends Event>(key: string, callback: (event: K) => void) => string,
-        unsubscribe: (uuid: string) => void
+        unsubscribe: (uuid: string) => void,
+        alert: {
+            debug    : (title: string, message: string, callback?: AlertCallback) => Alert,
+            info     : (title: string, message: string, callback?: AlertCallback) => Alert,
+            warning  : (title: string, message: string, callback?: AlertCallback) => Alert,
+            danger   : (title: string, message: string, callback?: AlertCallback) => Alert,
+            critical : (title: string, message: string, callback?: AlertCallback) => Alert,
+            success  : (title: string, message: string, callback?: AlertCallback) => Alert
+        }
     };
     var rocket: {
         subscribe: <K extends Event>(key: string, callback: (event: K) => void) => string,
-        unsubscribe: (uuid: string) => void
+        unsubscribe: (uuid: string) => void,
+        alert: {
+            debug    : (title: string, message: string, callback?: AlertCallback) => Alert,
+            info     : (title: string, message: string, callback?: AlertCallback) => Alert,
+            warning  : (title: string, message: string, callback?: AlertCallback) => Alert,
+            danger   : (title: string, message: string, callback?: AlertCallback) => Alert,
+            critical : (title: string, message: string, callback?: AlertCallback) => Alert,
+            success  : (title: string, message: string, callback?: AlertCallback) => Alert
+        }
     };
 
     var rocketEventsList: {
@@ -25,6 +41,10 @@ declare global {
                 onData  : "media.video.onData"
             }
         },
-        alert: "alert"
+        alert   : "alert",
+        network : {
+            change : "network.change",
+            init   : "network.init"
+        }
     };
 }

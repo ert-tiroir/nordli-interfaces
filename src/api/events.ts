@@ -33,6 +33,9 @@ export const EVENT_TYPES = (function (names: string[]): EventContainerType {
         "media.video.onData",
         "media.video.onEnd",
 
-        "alert"
+        "alert",
+
+        "network.init",
+        "network.change"
     ]
 );

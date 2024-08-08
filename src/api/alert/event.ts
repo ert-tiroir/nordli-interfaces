@@ -1,3 +1,4 @@
+import { CONFIG } from "../../config.ts";
 import { RocketAPI } from "../api.ts";
 import { Event } from "../events.ts";
 
@@ -11,14 +12,23 @@ export const SUCCESS  = "SUCCESS";
 export class AlertCallback {
     readonly callback: (accepted: boolean) => void;
 
+    readonly onClose: () => void;
+
     readonly acceptString: string;
     readonly declineString: string;
 
-    constructor (callback: (accepted: boolean) => void, accept: string, decline: string) {
+    constructor (callback: (accepted: boolean) => void, accept: string, decline: string, onClose?: () => void) {
         this.callback = callback;
 
         this.acceptString  = accept;
         this.declineString = decline;
+
+        if (onClose === undefined) onClose = () => {};
+        this.onClose = onClose;
+    }
+
+    static defaultNamedCallback (callback: (accepted: boolean) => void) {
+        return new AlertCallback(callback, CONFIG.alert.DEFAULT_ACCEPT_STRING, CONFIG.alert.DEFAULT_DECLINE_STRING);
     }
 };
 
