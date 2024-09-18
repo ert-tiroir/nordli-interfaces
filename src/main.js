@@ -2,6 +2,7 @@ const { app, BrowserWindow } = require('electron');
 const path = require('node:path');
 const { initMainFS } = require('./ipc/fs/main');
 const { initMainProcess } = require('./ipc/process/main');
+const { initRocketSocket } = require('./ipc/socket/main');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -24,6 +25,7 @@ const createWindow = () => {
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
+  return mainWindow;
 };
 
 // This method will be called when Electron has finished
@@ -33,7 +35,8 @@ app.whenReady().then(() => {
   initMainFS();
   initMainProcess();
 
-  createWindow();
+  const window = createWindow(); 
+  initRocketSocket(window.webContents);
 
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.

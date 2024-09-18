@@ -1,4 +1,64 @@
 
+export class RotatingBuffer {
+    private _buffer: Buffer;
+
+    private mxsize : number;
+    private size   : number;
+    private off    : number;
+
+    constructor () {
+        this.size = 0;
+        this.off  = 0;
+
+        this._buffer = Buffer.alloc( 10_000_000 );
+        this.mxsize  = 5_000_000;
+    }
+
+    view_normal () {
+        return this._buffer.subarray(this.off);
+    }
+    normalize (target_size: number | undefined = undefined) {
+        if (target_size === undefined) target_size = this.mxsize;
+        
+        const buffer = Buffer.alloc(2 * target_size);
+        for (let i = 0; i < this.size; i ++) {
+            buffer[i] = this._buffer[i + this.off];
+        
+            buffer[i + target_size] = buffer[i];
+        }
+
+        this._buffer = buffer;
+
+        this.mxsize = target_size;
+        this.off    = 0;
+    }
+    put (data: Buffer) {
+        while (data.length + this.size > this.mxsize)
+            this.normalize(this.mxsize * 2);
+        
+        let offset = this.off + this.size;
+        for (let i = 0; i < data.length; i ++) {
+            if (offset == this.mxsize) offset = 0;
+            this._buffer[offset] = data[i];
+            this._buffer[offset + this.mxsize] = data[i];
+            this.size ++;
+
+            offset ++;
+        }
+    }
+    pop (length: number) {
+        this.size -= length;
+        this.off  += length;
+        this.off  %= this.mxsize;
+
+        if (this.off * 2 >= this.mxsize) this.normalize();
+    }
+
+    get length () {
+        return this.size;
+    }
+}
+
 export class Queue<T> {
     private data: (T | undefined)[];
 
@@ -50,14 +110,12 @@ export class Queue<T> {
     }
 
     push (x: T) {
-        console.log(x)
         if (this.inn_size === this.max_size)
             this.double_size();
         
         let push_index = this.remap(this.offset + this.inn_size);
         this.data[push_index] = x;
         this.inn_size ++;
-        console.log(this.data, this.offset, this.inn_size, this.max_size)
     }
     peek (): T {
         return this.data[this.offset] as T;

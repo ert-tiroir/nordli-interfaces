@@ -17,21 +17,17 @@ export function initMainProcess () {
         let result = lastUUID.toString();
 
         proc.stdout.on( "data", (data) => {
-            console.log("STDOUT", data);
             event.sender.send( "process.event.stdout", result, data );
         } );
         proc.stderr.on( "data", (data) => {
-            console.log("STDERR", data);
             event.sender.send( "process.event.stderr", result, data );
         } );
         proc.on( "close", (code) => {
-            console.log("CLOSE")
             event.sender.send( "process.event.close", result, code );
             proc.removeAllListeners();
             delete processes[result];
         } );
         proc.on('error', (err) => {
-            console.log("ERROR", err);
             event.sender.send( "process.event.error", result, err );
             proc.removeAllListeners();
             delete processes[result];
@@ -47,7 +43,13 @@ export function initMainProcess () {
         const controller = proc.controller;
         controller.abort();
         
-        proc.removeAllListeners();
+        proc.proc.removeAllListeners();
         delete processes[uuid];
     } );
+    ipcMain.handle( "process.send.stdin", (event, uuid, data) => {
+        const proc = processes[uuid];
+        if (proc === undefined) return ;
+
+        proc.proc.stdin.write(data);
+    } )
 }
